@@ -48,6 +48,13 @@ export function createI18nMiddleware({
 			return NextResponse.redirect(request.nextUrl)
 		}
 
+		// todo : experiments
+		// (?) Path name without any locale prefix
+		// let canonicalPath = detection.source === 'path' ? pathname.substring(detection.locale.length + 1) : pathname
+		// if (canonicalPath.match(config.pathMatcher)) {
+		//
+		// }
+
 		// Process the request
 		const res = NextResponse.next()
 		// todo : (!) THIS APPROACH POLLUTES THE ACTUAL RESPONSE HEADERS
@@ -59,14 +66,15 @@ export function createI18nMiddleware({
 		res.headers.set('x-locale', detection.locale)
 
 		// Make sure to sync the cookie to the current locale
-		if (detection.source !== 'cookie') {
-			res.cookies.set(cookieName, detection.locale, {
-				maxAge: cookieAge,
-				httpOnly: false,
-				secure: false,
-				sameSite: 'lax'
-			})
-		}
+		// todo : disabled
+		// if (detection.source !== 'cookie') {
+		// 	res.cookies.set(cookieName, detection.locale, {
+		// 		maxAge: cookieAge,
+		// 		httpOnly: false,
+		// 		secure: false,
+		// 		sameSite: 'lax'
+		// 	})
+		// }
 		return res
 	}
 }

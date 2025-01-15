@@ -9,11 +9,11 @@ export function Links() {
 			<Link className='text-blue-600 hover:underline' href='/xx/article'>
 				Article
 			</Link>
-			<Link className='text-blue-600 hover:underline' href='/implicit'>
-				Implicit
-			</Link>
 			<Link className='text-blue-600 hover:underline' href='/query'>
 				Query
+			</Link>
+			<Link className='text-blue-600 hover:underline' href='/implicit'>
+				Implicit
 			</Link>
 		</div>
 	)

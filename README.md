@@ -20,3 +20,7 @@ wrangler project create svara-test-i18n --production-branch main --compatibility
 
 And proceed to configure the account and paths in the final parts of
 the [deployment pipeline](.github/workflows/publish.yml) 
+
+## Todo
+
+- Remove default language prefix `/en`
