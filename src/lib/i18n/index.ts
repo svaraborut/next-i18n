@@ -50,6 +50,10 @@ export function createI18nMiddleware({
 
 		// Process the request
 		const res = NextResponse.next()
+		// todo : (!) THIS APPROACH POLLUTES THE ACTUAL RESPONSE HEADERS
+		// todo : this seems kind of a hack that goes against next.js. It is not
+		//        clear why this data is not accessible within the layout components
+		res.headers.set('x-url', request.url)
 		// Inject locale as a header to all requests to pass it to layouts/pages
 		// (NOT CLEAR WHY IS SET TO THE RESPONSE)
 		res.headers.set('x-locale', detection.locale)
