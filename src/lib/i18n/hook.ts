@@ -14,7 +14,7 @@ export function useLocaleSwitch() {
 
 	const setLocale = useCallback((locale: string) => {
 		;(async () => {
-			console.log(`🌐 switching to ${locale}`)
+			// console.log(`🌐 switching to ${locale}`)
 			await setLocaleAction(locale)
 			// This is required to force the current page to refresh, otherwise the
 			// content of the page will be stale at the old language and only update

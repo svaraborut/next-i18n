@@ -14,7 +14,7 @@ async function getMessages(locale: string) {
 export default async function Page() {
 	const locale = await getLocale()
 	const messages = await getMessages(locale)
-	console.log(`🍞 rendering ${locale}`)
+	// console.log(`🍞 rendering ${locale}`)
 
 	return (
 		<IntlProvider messages={messages} locale={locale}>
