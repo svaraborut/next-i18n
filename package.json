@@ -1,7 +1,7 @@
 {
   "name": "next-i18n",
   "description": "Next.js translation playground",
-  "version": "0.0.0",
+  "version": "0.1.19",
   "private": true,
   "scripts": {
     "dev": "next dev",

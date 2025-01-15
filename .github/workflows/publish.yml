@@ -30,7 +30,7 @@ jobs:
 
       - name: Watermark
         id: watermark
-        uses: svaraborut/watermark@v0.1
+        uses: svaraborut/watermark@v1
         with:
           format: 'BRANCH.SHA7 DATE'
           auto-version: npm
