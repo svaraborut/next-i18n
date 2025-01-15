@@ -1,10 +1,13 @@
 'use client'
-import { useLocale, useTranslations } from 'use-intl'
-import { Link } from '@/i18n/Link'
 import { i18nConfig } from '@/middleware'
+import { useLocale, useTranslations } from 'use-intl'
 import { Links } from '@/components/Links'
+import { Link } from '@/lib/i18n/Link'
+import { LocaleSwitch } from '@/components/LocaleSwitch'
 
-export function Content() {
+export const runtime = 'edge'
+
+export default async function Page() {
 	const currentLocale = useLocale()
 	const t = useTranslations()
 	return (
@@ -17,12 +20,14 @@ export function Content() {
 					<Link
 						key={cc}
 						className={cc !== currentLocale ? 'text-blue-600 hover:underline' : 'underline'}
+						locale={cc}
 						href={`/query?ln=${cc}`}
 					>
 						{cc}
 					</Link>
 				))}
 			</div>
+			<LocaleSwitch />
 		</div>
 	)
 }

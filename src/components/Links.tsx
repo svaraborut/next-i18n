@@ -1,4 +1,4 @@
-import { Link } from '@/i18n/Link'
+import { Link } from '@/lib/i18n/Link'
 
 export function Links() {
 	return (

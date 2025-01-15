@@ -19,4 +19,8 @@ wrangler project create svara-test-i18n --production-branch main --compatibility
 ```
 
 And proceed to configure the account and paths in the final parts of
-the [deployment pipeline](.github/workflows/publish.yml) 
+the [deployment pipeline](.github/workflows/publish.yml)
+
+## Todo
+
+- Migrate to [wrangler-action](https://github.com/cloudflare/pages-action)
