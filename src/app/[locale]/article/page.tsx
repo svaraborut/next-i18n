@@ -14,6 +14,7 @@ export default function Page() {
 	return (
 		<div className='p-8'>
 			<Links />
+			<h1 className='text-xl font-bold'>Article</h1>
 			<h1 className='text-xl font-bold'>{t('title')}</h1>
 			<p>{t('description')}</p>
 			<div className='flex gap-2'>
