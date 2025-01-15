@@ -28,14 +28,20 @@ jobs:
         with:
           node-version: 22
 
+      - name: Watermark
+        id: watermark
+        uses: svaraborut/watermark@v0.1.0
+        with:
+          format: 'BRANCH.SHA7 DATE'
+          auto-version: npm
+
       - name: NPM Install
         run: npm ci
 
       - name: Build Next.js for CloudFlare
         run: npm run pages:build
         env:
-          NEXT_PUBLIC_BRANCH: ${{ github.ref_name }}
-          NEXT_PUBLIC_SHA: ${{ github.sha }}
+          NEXT_PUBLIC_WATERMARK: ${{ steps.watermark.outputs.watermark }}
           NEXT_PUBLIC_URL: 'https://i18n.svara.io'
 
       ### Push project to cloudflare

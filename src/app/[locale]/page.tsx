@@ -13,7 +13,7 @@ export default function Page() {
 			<h1 className='text-xl font-bold'>Homepage</h1>
 			<h1>{t('title')}</h1>
 			<span className='font-mono'>
-				#{process.env.NEXT_PUBLIC_BRANCH}.{process.env.NEXT_PUBLIC_SHA}
+				{process.env.NEXT_PUBLIC_WATERMARK}
 			</span>
 		</div>
 	)
