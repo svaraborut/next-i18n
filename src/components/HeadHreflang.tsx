@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { i18nConfig } from '@/i18n'
+import { i18nConfig } from '@/middleware'
 
 export function HeadHreflang({ locale }: { locale: string }) {
 	// todo : https://stackoverflow.com/questions/28291574/

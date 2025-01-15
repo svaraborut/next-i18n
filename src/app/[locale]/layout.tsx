@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { Body } from '@/components/Body'
-import { cache, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { HeadHreflang } from '@/components/HeadHreflang'
-import { i18nConfig } from '@/i18n'
-import { IntlProvider } from '@/i18n/proxy'
+import { IntlProvider } from '@/lib/i18n/provider'
+import { i18nConfig } from '@/middleware'
 
 export const metadata: Metadata = {
 	title: 'Translated',
@@ -23,10 +23,6 @@ async function getMessages(locale: string) {
 	}
 }
 
-// ??
-const getNow = cache(() => new Date())
-const getTimeZone = cache(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
-
 export default async function RootLayout({
 	children,
 	params
@@ -40,10 +36,7 @@ export default async function RootLayout({
 	return (
 		<html lang={locale}>
 			<HeadHreflang locale={locale} />
-			{/*<NextIntlClientProvider messages={messages}>*/}
-			{/*	<Body>{children}</Body>*/}
-			{/*</NextIntlClientProvider>*/}
-			<IntlProvider messages={messages} locale={locale} now={getNow()} timeZone={getTimeZone()}>
+			<IntlProvider messages={messages} locale={locale}>
 				<Body>{children}</Body>
 			</IntlProvider>
 		</html>
