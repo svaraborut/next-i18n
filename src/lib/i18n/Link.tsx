@@ -37,7 +37,7 @@ export type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyo
 		locale?: string
 	}
 
-export function Link({ href, hrefLang, locale, ...props }: LinkProps) {
+export function Link({ href, hrefLang, locale, prefetch, ...props }: LinkProps) {
 	const currentLocale = useLocale()
 	const targetLocale = locale ?? currentLocale
 
@@ -46,5 +46,16 @@ export function Link({ href, hrefLang, locale, ...props }: LinkProps) {
 		return prepareHref({ href, currentLocale, targetLocale })
 	}, [href, currentLocale, targetLocale])
 
-	return <NextLink href={href2!} hrefLang={targetLocale} {...props} />
+	// (?) PREFETCHING WHEN LOCALE CHANGES WILL CAUSE COOKIE ASSIGNMENT OF THE
+	// TARGET LOCALE EFFECTIVELY SWITCHING THE USER LANGUAGE. FURTHERMORE PREFETCHING
+	// OTHER LOCALES IS NOT EFFICIENT AS IS VERY UNLIKELY THE USER WILL BE OFTEN
+	// SWITCHING LANGUAGE
+	return (
+		<NextLink
+			href={href2!}
+			hrefLang={targetLocale}
+			prefetch={currentLocale === targetLocale && prefetch}
+			{...props}
+		/>
+	)
 }
