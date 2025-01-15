@@ -4,6 +4,8 @@ import { i18nConfig } from '@/middleware'
 import { useLocaleSwitch } from '@/lib/i18n/hook'
 import { Links } from '@/components/Links'
 
+export const runtime = 'edge'
+
 export default function Page() {
 	const { currentLocale, setLocale } = useLocaleSwitch()
 	const t = useTranslations()

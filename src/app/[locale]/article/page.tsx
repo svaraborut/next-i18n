@@ -4,6 +4,8 @@ import { Link } from '@/i18n/Link'
 import { i18nConfig } from '@/middleware'
 import { Links } from '@/components/Links'
 
+export const runtime = 'edge'
+
 export default function Page() {
 	const locale = useLocale()
 	const t = useTranslations()

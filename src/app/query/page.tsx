@@ -3,6 +3,8 @@ import { IntlProvider } from '@/lib/i18n/provider'
 import { i18nConfig } from '@/middleware'
 import { getLocale } from '@/lib/i18n/server'
 
+export const runtime = 'edge'
+
 async function getMessages(locale: string) {
 	try {
 		return (await import(`@/i18n/main/${locale}`)).default

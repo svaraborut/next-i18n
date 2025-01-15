@@ -2,6 +2,8 @@
 import { useTranslations } from 'use-intl'
 import { Links } from '@/components/Links'
 
+export const runtime = 'edge'
+
 export default function Page() {
 	const t = useTranslations()
 

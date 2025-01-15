@@ -4,6 +4,7 @@ import { IntlProvider } from '@/lib/i18n/provider'
 import { i18nConfig } from '@/middleware'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata({
 	params
@@ -34,6 +35,10 @@ export async function generateMetadata({
 	}
 }
 
+// todo : not working
+// export const dynamicParams = false
+// export const dynamic = 'force-static'
+
 // Generate locales at root level, this should be inherited by all child layouts
 export async function generateStaticParams() {
 	return i18nConfig.locales.map((locale) => ({ locale }))
@@ -55,6 +60,10 @@ export default async function RootLayout({
 	params: Promise<{ locale: string }>
 }>) {
 	const { locale } = await params
+	if (!i18nConfig.locales.includes(locale)) {
+		notFound()
+	}
+
 	const messages = await getMessages(locale)
 
 	return (
