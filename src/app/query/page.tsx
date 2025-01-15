@@ -23,6 +23,7 @@ export default async function Page({
 }: Readonly<{
 	searchParams?: { [key: string]: string | string[] | undefined }
 }>) {
+	searchParams = await searchParams // todo
 	// >> NON STATIC : Manage languages
 	let locale: string | undefined = undefined
 	if (!locale) {
