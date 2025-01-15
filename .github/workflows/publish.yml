@@ -1,0 +1,49 @@
+name: CloudFlare
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    name: Build and Publish
+    steps:
+
+      ### Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      ### Build Astro project
+      - name: NodeJs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 22
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Build Next.js for CloudFlare
+        run: npm run pages:build
+        env:
+          NEXT_PUBLIC_BRANCH: ${{ github.ref_name }}
+          NEXT_PUBLIC_SHA: ${{ github.sha }}
+          NEXT_PUBLIC_URL: 'https://i18n.svara.io'
+
+      ### Push project to cloudflare
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ea5abdeac071f5459e061223184bb457
+          projectName: svara-test-i18n
+          directory: '.vercel/output/static'
+          branch: ${{ github.ref_name }}
