@@ -3,6 +3,32 @@ import NextLink from 'next/link'
 import { LinkProps as NextLinkProps } from 'next/dist/client/link'
 import React, { useMemo } from 'react'
 import { useLocale } from 'use-intl'
+import { i18nConfig } from '@/middleware'
+
+export function prepareHref({
+	href,
+	targetLocale,
+	currentLocale
+}: {
+	href: string
+	targetLocale: string
+	currentLocale: string | undefined
+}) {
+	// todo : handle external links
+	// todo : experimental
+	const urlLocale = i18nConfig.locales.find((cc) => href.startsWith('/' + cc))
+	const pathnameCanonical = (urlLocale ? href.slice(1 + urlLocale.length) : href) || '/'
+
+	if (pathnameCanonical.match(i18nConfig.matcher.url)) {
+		if (!urlLocale && targetLocale !== i18nConfig.defaultLocale)
+			return `/${targetLocale}${pathnameCanonical}`
+	} else if (pathnameCanonical.match(i18nConfig.matcher.query)) {
+		if (targetLocale !== i18nConfig.defaultLocale) return `${pathnameCanonical}?ln=${targetLocale}`
+	} else {
+		if (targetLocale !== currentLocale) return `${pathnameCanonical}?ln=${targetLocale}`
+	}
+	return href
+}
 
 export type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProps> &
 	NextLinkProps & {
@@ -15,28 +41,9 @@ export function Link({ href, hrefLang, locale, ...props }: LinkProps) {
 	const currentLocale = useLocale()
 	const targetLocale = locale ?? currentLocale
 
-	// Correct the link if there is a locale switch ongoing
-	// todo : this is a mess
-	// const href2 = useMemo(() => {
-	// 	const url = typeof href === 'string' ? new URL(href) : href
-	// 	if (targetLocale !== currentLocale) {
-	// 		const prefix = '/' + currentLocale
-	// 		if (url.pathname?.startsWith(prefix)) {
-	// 			url.pathname = '/' + targetLocale + url.pathname.slice(prefix.length)
-	// 		}
-	// 	}
-	// 	return url.href
-	// }, [href])
-
 	const href2 = useMemo(() => {
 		if (typeof href !== 'string') throw new Error('Unsupported')
-		for (const prefix of ['/xx', '/' + currentLocale]) {
-			if (href.startsWith(prefix)) {
-				href = '/' + targetLocale + href.slice(prefix.length)
-				break
-			}
-		}
-		return href
+		return prepareHref({ href, currentLocale, targetLocale })
 	}, [href, currentLocale, targetLocale])
 
 	return <NextLink href={href2!} hrefLang={targetLocale} {...props} />

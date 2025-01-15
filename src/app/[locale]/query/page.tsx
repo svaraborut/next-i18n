@@ -21,7 +21,7 @@ export default async function Page() {
 						key={cc}
 						className={cc !== currentLocale ? 'text-blue-600 hover:underline' : 'underline'}
 						locale={cc}
-						href={`/query?ln=${cc}`}
+						href='/query'
 					>
 						{cc}
 					</Link>

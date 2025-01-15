@@ -21,7 +21,7 @@ export default function Page() {
 					<Link
 						key={cc}
 						className={cc !== locale ? 'text-blue-600 hover:underline' : 'text-blue-600 underline'}
-						href={`/xx/article`}
+						href={`/article`}
 						locale={cc}
 					>
 						{cc}
