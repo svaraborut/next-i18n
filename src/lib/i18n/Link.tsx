@@ -16,7 +16,7 @@ export function prepareHref({
 }) {
 	// todo : handle external links
 	// todo : experimental
-	const urlLocale = i18nConfig.locales.find((cc) => href.startsWith('/' + cc))
+	const urlLocale = i18nConfig.locales.find((cc) => href === `/${cc}` || href.startsWith(`/${cc}/`))
 	const pathnameCanonical = (urlLocale ? href.slice(1 + urlLocale.length) : href) || '/'
 
 	if (pathnameCanonical.match(i18nConfig.matcher.url)) {

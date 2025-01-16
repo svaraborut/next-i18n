@@ -49,7 +49,9 @@ export const middleware = (request: NextRequest) => {
 	const { pathname } = request.nextUrl
 
 	// Canonical pathname
-	const urlLocale = i18nConfig.locales.find((cc) => pathname.startsWith('/' + cc))
+	const urlLocale = i18nConfig.locales.find(
+		(cc) => pathname === `/${cc}` || pathname.startsWith(`/${cc}/`)
+	)
 	const qLocale = onlyAcceptable(request.nextUrl.searchParams.get('ln') ?? undefined)
 	// (!) Here is important to convert empty strings to a single slash
 	const pathnameCanonical = (urlLocale ? pathname.slice(1 + urlLocale.length) : pathname) || '/'
