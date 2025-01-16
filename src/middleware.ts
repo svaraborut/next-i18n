@@ -9,7 +9,7 @@ export const i18nConfig = {
 	locales: ['en', 'it', 'si', 'fr', 'de', 'ru', 'gr', 'zh'],
 	defaultLocale: 'en',
 	matcher: {
-		url: /^\/(|article)$/,
+		url: /^\/(|article|description)$/,
 		query: /^\/query$/
 	}
 }

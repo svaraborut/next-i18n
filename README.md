@@ -25,3 +25,4 @@ the [deployment pipeline](.github/workflows/publish.yml)
 
 - Migrate to [wrangler-action](https://github.com/cloudflare/pages-action)
 - Add hreflang to query pages
+- ✅ Add style to Markdown

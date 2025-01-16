@@ -1,0 +1,19 @@
+### 🥖 England
+
+| Metric     | Value                             |
+|------------|-----------------------------------|
+| Population | 56 million                        |
+| GDP        | $2.8 trillion (nominal, UK total) |
+| Area       | 130,395 km²                       |
+| Timezone   | Greenwich Mean Time (GMT)         |
+
+England, officially known as the United Kingdom of Great Britain and Northern Ireland, is a country in Western Europe
+and the largest country within the United Kingdom. It has a long history, from Roman times to the Industrial Revolution.
+London, the capital, is a global center for culture, economy, and politics. Landmarks such as Buckingham Palace, the
+Tower of London, and Westminster Abbey are iconic. England has also made significant contributions to literature, music,
+and science, with famous figures like Shakespeare and Isaac Newton.
+
+England is known for its royal history, numerous historical castles and gardens, and its football tradition. English
+cuisine includes well-known dishes like Fish and Chips, Yorkshire Pudding, and the traditional Afternoon Tea.
+Geographically, England is diverse, from the gentle hills of the Cotswolds to the picturesque coasts of Cornwall. The
+country also plays a central role in global politics and has been an important player in world history.
