@@ -4,28 +4,53 @@ import { LinkProps as NextLinkProps } from 'next/dist/client/link'
 import React, { useMemo } from 'react'
 import { useLocale } from 'use-intl'
 import { i18nConfig } from '@/middleware'
+import { UrlObject } from 'node:url'
+
+const regexLnRemover = /([?&]ln=\w+$|ln=\w+&)/g
 
 export function prepareHref({
 	href,
 	targetLocale,
 	currentLocale
 }: {
-	href: string
+	href: string | UrlObject
 	targetLocale: string
 	currentLocale: string | undefined
 }) {
+	if (typeof href === 'string' && href.startsWith('.')) {
+		throw new Error(`Unsupported relative link ${href}`)
+	} else if (typeof href !== 'string') {
+		throw new Error('Unsupported url object')
+	}
+
 	// todo : handle external links
 	// todo : experimental
 	const urlLocale = i18nConfig.locales.find((cc) => href === `/${cc}` || href.startsWith(`/${cc}/`))
-	const pathnameCanonical = (urlLocale ? href.slice(1 + urlLocale.length) : href) || '/'
+	// (!) Fix base single slash and remove any query parameter from the url
+	const pathnameCanonical = ((urlLocale ? href.slice(1 + urlLocale.length) : href) || '/').replace(
+		regexLnRemover,
+		''
+	)
+	const qSign = pathnameCanonical.includes('?') ? '&' : '?'
 
+	// (!) Always include also defaultLocale to leverage the middleware to perform a
+	// redirect and actually switch the language.
 	if (pathnameCanonical.match(i18nConfig.matcher.url)) {
-		if (!urlLocale && targetLocale !== i18nConfig.defaultLocale)
+		// Always add non default locale OR also default if is a language switch.
+		if (
+			!urlLocale &&
+			(targetLocale !== i18nConfig.defaultLocale || targetLocale !== currentLocale)
+		) {
 			return `/${targetLocale}${pathnameCanonical}`
+		}
 	} else if (pathnameCanonical.match(i18nConfig.matcher.query)) {
-		if (targetLocale !== i18nConfig.defaultLocale) return `${pathnameCanonical}?ln=${targetLocale}`
+		// Always add non default locale OR also default if is a language switch.
+		if (targetLocale !== i18nConfig.defaultLocale || targetLocale !== currentLocale) {
+			return `${pathnameCanonical}${qSign}ln=${targetLocale}`
+		}
 	} else {
-		if (targetLocale !== currentLocale) return `${pathnameCanonical}?ln=${targetLocale}`
+		// Change language if required
+		if (targetLocale !== currentLocale) return `${pathnameCanonical}${qSign}ln=${targetLocale}`
 	}
 	return href
 }

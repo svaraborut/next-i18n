@@ -10,12 +10,29 @@ https://medium.com/@ferlat.simon/internationalize-your-next-js-static-site-with-
 - **Query**
 - **URL**
 
+## `<Link/>`
+
+> [!WARNING]
+> There are some noticeable navigation quirks where some links stop working from time to time. The
+> community [claims](https://github.com/vercel/next.js/discussions/57565) it is related to prefetching, therefore
+> prefetch will be disabled all together. MONITOR THIS ISSUE TO RE-ENABLE IF FIXED.
+
+> [!TIP]
+> Link has a slightly asymmetric behaviour with `defaultLanguage`. When the current language is different from the
+> default all links will also include the default. This is needed and cannot be disabled.
+>
+> This is to solve: When a user has a cookie set to a locale (like `gr`) visiting an un-prefixed url `/article` will
+> yield to a `/gr/article` redirect rather than displaying the `/article` page (in `en`) this is the expected behaviour
+> unless someone is visiting `/article` to intentionally change language. Therefore, links will link to `/en/article` to
+> intentionally force a language switch redirect. This prefixing will be disabled if the current locale is already `en`,
+> to prevent redirects during same-language navigation on the `defaultLocale`.
+
 ## Deploy
 
 Use wrangler to create a new project using
 
 ```shell
-wrangler project create svara-test-i18n --production-branch main --compatibility-date 2025-01-15 --compatibility-flag nodejs_compat
+wrangler pages project create svara-test-i18n --production-branch main --compatibility-date 2025-01-15 --compatibility-flag nodejs_compat
 ```
 
 And proceed to configure the account and paths in the final parts of
