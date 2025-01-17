@@ -49,12 +49,14 @@ export function Link({ href, hrefLang, locale, prefetch, ...props }: LinkProps) 
 	// (?) PREFETCHING WHEN LOCALE CHANGES WILL CAUSE COOKIE ASSIGNMENT OF THE
 	// TARGET LOCALE EFFECTIVELY SWITCHING THE USER LANGUAGE. FURTHERMORE PREFETCHING
 	// OTHER LOCALES IS NOT EFFICIENT AS IS VERY UNLIKELY THE USER WILL BE OFTEN
-	// SWITCHING LANGUAGE
+	// SWITCHING LANGUAGE.
+	// (!) PREFETCHING DISABLED ALL TOGETHER DUE TO https://github.com/vercel/next.js/discussions/57565
 	return (
 		<NextLink
 			href={href2!}
 			hrefLang={targetLocale}
-			prefetch={currentLocale === targetLocale && prefetch}
+			// prefetch={currentLocale === targetLocale && prefetch}
+			prefetch={false}
 			{...props}
 		/>
 	)
