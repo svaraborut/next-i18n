@@ -40,6 +40,6 @@ the [deployment pipeline](.github/workflows/publish.yml)
 
 ## Todo
 
-- Migrate to [wrangler-action](https://github.com/cloudflare/pages-action)
+- ✅ Migrate to [wrangler-action](https://github.com/cloudflare/pages-action)
 - Add hreflang to query pages
 - ✅ Add style to Markdown
