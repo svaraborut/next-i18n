@@ -8,10 +8,11 @@ export const runtime = 'edge'
 
 export default async function Page() {
 	const locale = useLocale()
-	const { Content, isBackup } = await loadLocalizedContent(
+	const { data, isBackup } = await loadLocalizedContent(
 		locale,
-		async (cc) => (await import(`@/content/desc.${cc}.md`)).default
+		async (cc) => await import(`@/content/desc.${cc}.md`)
 	)
+	const Content = data.default
 
 	return (
 		<div className='p-8'>
