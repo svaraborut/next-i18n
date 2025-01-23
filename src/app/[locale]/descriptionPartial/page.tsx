@@ -10,7 +10,7 @@ export default async function Page() {
 	const locale = useLocale()
 	const { Content, isBackup } = await loadLocalizedContent(
 		locale,
-		async (cc) => (await import(`@/content/desc.${cc}.md`)).default
+		async (cc) => (await import(`@/content/partial.${cc}.md`)).default
 	)
 
 	return (

@@ -1,4 +1,4 @@
-import '@/components/globals.css'
+import '@/components/globals.scss'
 import { Body } from '@/components/Body'
 import { Metadata } from 'next'
 

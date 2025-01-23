@@ -12,6 +12,9 @@ export function Links() {
 			<Link className='text-blue-600 hover:underline' href='/description'>
 				Description
 			</Link>
+			<Link className='text-blue-600 hover:underline' href='/descriptionPartial'>
+				Partial
+			</Link>
 			<Link className='text-blue-600 hover:underline' href='/implicit'>
 				Implicit
 			</Link>

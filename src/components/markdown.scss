@@ -1,0 +1,81 @@
+/**
+To prevent cluttering the code, compact all Markdown styles in this SCSS file
+https://github.com/tailwindlabs/tailwindcss-typography?tab=readme-ov-file#element-modifiers
+todo : this approach theoretically has mostly dropped the requirement of this plugin
+ */
+.markdown {
+  @apply prose space-y-8 [&_section]:space-y-8;
+  // Heading
+  h1 {
+    @apply font-bold text-4xl leading-8
+  }
+
+  h2 {
+    @apply font-bold text-2xl leading-8
+  }
+
+  h3 {
+    @apply font-semibold text-xl
+  }
+
+  h4 {
+    @apply font-semibold text-lg
+  }
+
+  // Quote
+  blockquote {
+    @apply p-4 bg-secondary rounded-lg
+  }
+
+  blockquote {
+    @apply border-l-4 border-primary
+  }
+
+  blockquote {
+    @apply space-y-4
+  }
+
+  // Code
+  pre {
+    @apply bg-secondary text-foreground
+  }
+
+  // Table
+  table {
+    @apply rounded
+  }
+
+  th {
+    @apply border px-2 py-0.5 bg-gray-100
+  }
+
+  td {
+    @apply border px-2 py-0.5
+  }
+
+  // Other
+  code {
+    @apply bg-gray-100 px-0.5 rounded
+  }
+
+  a {
+    @apply underline
+  }
+
+  ul {
+    @apply list-disc pl-4
+  }
+
+  ol {
+    @apply list-decimal pl-4
+  }
+
+  img {
+    @apply rounded-2xl w-full
+  }
+
+  // todo  how to style the caption
+  //figcaption {
+  //  @apply text-sm block mt-2 text-center
+  //}
+}
