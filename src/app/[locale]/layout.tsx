@@ -1,6 +1,6 @@
 import { Body } from '@/components/Body'
 import { ReactNode } from 'react'
-import { IntlProvider } from '@/lib/i18n/provider'
+import { IntlProvider } from '@/lib/i18n/IntlProvider'
 import { i18nConfig } from '@/middleware'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
