@@ -8,6 +8,8 @@ export type IntlProviderProps = Omit<IntlConfig, 'now' | 'timeZone'> & {
 	children: ReactNode
 }
 
+// todo : cache is not implemented under `use client`
+// https://stackoverflow.com/questions/76370924
 const getNow = cache(() => new Date())
 const getTimeZone = cache(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
 

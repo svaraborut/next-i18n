@@ -24,9 +24,12 @@ export async function generateMetadata(
 	const pathname = new URL((await parent).alternates?.canonical?.url!).pathname
 	const normalized = pathname.replace(`/${locale}`, '')
 
+	// Example of translated headers
+	const messages = await getMessages(locale)
+
 	return {
-		title: 'Static',
-		description: 'Statically generated pages via SSG',
+		title: `${messages.title} | Translated`,
+		description: messages.description ?? 'Translated and statically generated pages via SSG',
 		alternates: {
 			canonical: `/${locale}${normalized}`,
 			languages: {
@@ -44,7 +47,7 @@ export async function generateStaticParams() {
 	return i18nConfig.locales.map((locale) => ({ locale }))
 }
 
-async function getMessages(locale: string) {
+export async function getMessages(locale: string) {
 	try {
 		return (await import(`@/i18n/main/${locale}`)).default
 	} catch (e) {
