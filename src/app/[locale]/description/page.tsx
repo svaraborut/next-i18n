@@ -4,8 +4,6 @@ import { Links } from '@/components/Links'
 import { LocaleSwitch } from '@/components/LocaleSwitch'
 import { loadLocalizedContent } from '@/lib/i18n/content'
 
-export const runtime = 'edge'
-
 export default async function Page() {
 	const locale = useLocale()
 	const { data, isBackup } = await loadLocalizedContent(

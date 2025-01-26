@@ -5,8 +5,6 @@ import { Links } from '@/components/Links'
 import { Link } from '@/lib/i18n/Link'
 import { LocaleSwitch } from '@/components/LocaleSwitch'
 
-export const runtime = 'edge'
-
 export default async function Page() {
 	const currentLocale = useLocale()
 	const t = useTranslations()

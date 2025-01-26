@@ -4,6 +4,14 @@ Next.js internationalization playground
 
 https://medium.com/@ferlat.simon/internationalize-your-next-js-static-site-with-app-router-772f9f16e63
 
+## 🐛 Known Bugs
+
+Due to a known [BUG 899](https://github.com/cloudflare/next-on-pages/issues/899) it is fundamental to keep the Vercel
+CLI explicitly at version `^35.0.0` to allow for SSG routes static generation.
+
+For metadata generation a [Workaround](https://github.com/vercel/next.js/discussions/50189#discussioncomment-11480319)
+is implied to extract current path for `hrefLang` assembly at build time.
+
 ## Strategies
 
 - **Cookie**

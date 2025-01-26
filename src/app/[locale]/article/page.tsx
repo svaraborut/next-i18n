@@ -5,8 +5,6 @@ import { i18nConfig } from '@/middleware'
 import { Links } from '@/components/Links'
 import { LocaleSwitch } from '@/components/LocaleSwitch'
 
-export const runtime = 'edge'
-
 export default function Page() {
 	const locale = useLocale()
 	const t = useTranslations()
@@ -14,7 +12,7 @@ export default function Page() {
 	return (
 		<div className='p-8'>
 			<Links />
-			<h1 className='text-xl font-bold'>Article</h1>
+			<h1 className='text-xl font-bold'>Article {locale}</h1>
 			<h1 className='text-xl font-bold'>{t('title')}</h1>
 			<p>{t('description')}</p>
 			<div className='flex gap-2'>

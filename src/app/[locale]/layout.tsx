@@ -2,42 +2,42 @@ import { Body } from '@/components/Body'
 import { ReactNode } from 'react'
 import { IntlProvider } from '@/lib/i18n/IntlProvider'
 import { i18nConfig } from '@/middleware'
-import { Metadata } from 'next'
-import { headers } from 'next/headers'
-import { notFound } from 'next/navigation'
+import { Metadata, ResolvingMetadata } from 'next'
 
-export async function generateMetadata({
-	params
-}: {
-	params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-	const baseUrl = process.env.NEXT_PUBLIC_URL
+// (!) THIS ONLY WORKS IF THERE IS NO `runtime=edge` DECLARATION IN THE UNDERLYING PAGE.
+// THIS CAN ONLY BE ACHIEVED WITH Vercel CLI v35 (see known bugs)
+export const dynamicParams = false
+export const dynamic = 'error'
+
+// Localization metadata. THIS IS A CONVOLUTED HACK TO GENERATE HREFLANG FOR ANY PAGE
+// WITHIN THIS FOLDER.
+export async function generateMetadata(
+	{
+		params
+	}: {
+		params: Promise<{ locale: string }>
+	},
+	parent: ResolvingMetadata
+): Promise<Metadata> {
 	const { locale } = await params
-	// todo : ugly hack
-	const currentUrl = (await headers()).get('x-url')
-	const pathname = new URL(currentUrl!).pathname.replace(`/${locale}`, '')
+	// https://github.com/vercel/next.js/discussions/50189#discussioncomment-11480319
+	const pathname = new URL((await parent).alternates?.canonical?.url!).pathname
+	const normalized = pathname.replace(`/${locale}`, '')
 
-	// todo : how to add locales ?
 	return {
-		title: 'Translated',
-		description: 'Translated',
+		title: 'Static',
+		description: 'Statically generated pages via SSG',
 		alternates: {
-			canonical: `${baseUrl}/${locale}${pathname}`,
+			canonical: `/${locale}${normalized}`,
 			languages: {
-				'x-default': `${baseUrl}/${i18nConfig.defaultLocale}${pathname}`,
+				'x-default': `/${i18nConfig.defaultLocale}${normalized}`,
 				...Object.fromEntries(
-					i18nConfig.locales
-						.filter((cc) => cc !== locale)
-						.map((cc) => [cc, `${baseUrl}/${cc}${pathname}`])
+					i18nConfig.locales.filter((cc) => cc !== locale).map((cc) => [cc, `/${cc}${normalized}`])
 				)
 			}
 		}
 	}
 }
-
-// todo : not working
-// export const dynamicParams = false
-// export const dynamic = 'force-static'
 
 // Generate locales at root level, this should be inherited by all child layouts
 export async function generateStaticParams() {
@@ -60,10 +60,6 @@ export default async function RootLayout({
 	params: Promise<{ locale: string }>
 }>) {
 	const { locale } = await params
-	if (!i18nConfig.locales.includes(locale)) {
-		notFound()
-	}
-
 	const messages = await getMessages(locale)
 
 	return (
