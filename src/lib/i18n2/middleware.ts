@@ -60,9 +60,9 @@ export function createMiddleware({
 				request.url !== match.publicUrl.href ||
 				(match.detectedLocale && match.detectedLocale !== match.currentLocale)
 			) {
-				console.log(
-					`🚩 [redir] ${request.url} [${match.currentLocale}] -> ${match.publicUrl.href} [${match.detectedLocale}] (cn: ${match.canonicalUrl.href})`
-				)
+				// console.log(
+				// 	`🚩 [redir] ${request.url} [${match.currentLocale}] -> ${match.publicUrl.href} [${match.detectedLocale}] (cn: ${match.canonicalUrl.href})`
+				// )
 				const res = NextResponse.redirect(match.publicUrl)
 				res.cookies.set(
 					cookieOptions.name,
@@ -71,9 +71,9 @@ export function createMiddleware({
 				)
 				return res
 			} else {
-				console.log(
-					`🚩 [     ] ${request.url} [${match.currentLocale}] -> ${match.publicUrl.href} [${match.detectedLocale}] (cn: ${match.canonicalUrl.href})`
-				)
+				// console.log(
+				// 	`🚩 [     ] ${request.url} [${match.currentLocale}] -> ${match.publicUrl.href} [${match.detectedLocale}] (cn: ${match.canonicalUrl.href})`
+				// )
 				// Proxy to the canonical translation url.
 				return NextResponse.rewrite(match.canonicalUrl)
 			}
