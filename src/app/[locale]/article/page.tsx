@@ -1,6 +1,6 @@
 'use client'
 import { useLocale, useTranslations } from 'use-intl'
-import { Link } from '@/lib/i18n/Link'
+import { Link } from '@/lib/routing'
 import { i18nConfig } from '@/middleware'
 import { Links } from '@/components/Links'
 import { LocaleSwitch } from '@/components/LocaleSwitch'

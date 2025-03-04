@@ -2,7 +2,7 @@
 import { i18nConfig } from '@/middleware'
 import { useLocale, useTranslations } from 'use-intl'
 import { Links } from '@/components/Links'
-import { Link } from '@/lib/i18n/Link'
+import { Link } from '@/lib/routing'
 import { LocaleSwitch } from '@/components/LocaleSwitch'
 
 export default async function Page() {

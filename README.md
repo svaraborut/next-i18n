@@ -51,3 +51,30 @@ the [deployment pipeline](.github/workflows/publish.yml)
 - ✅ Migrate to [wrangler-action](https://github.com/cloudflare/pages-action)
 - Add hreflang to query pages
 - ✅ Add style to Markdown
+
+## Development
+
+### Actions of the middleware
+
+- redirect from `/` to `/it` when the preference requires `it`
+- remove unwanted URL parts (like QR strings)
+
+### `zone.match`
+
+Produces various values to be used by the server middleware to resolve localization redirects:
+
+- **Display URL** the url that should be visible to the user. If it does not match the request's one the user will be
+  redirected to such url.
+- **Canonical URL** the url used for internal rewrites, should always match the `/[locale]/...` pattern.
+- **Locale** indicating the language detected within the request url.
+
+| Zone Type | Preference (*) | Request URL   | Display URL   | Canonical URL | Locale | Notes |
+|-----------|----------------|---------------|---------------|---------------|--------|-------|
+| URL       |                | `/article`    | `/article`    | `/article`    | ``     | (1)   |
+| URL       |                | `/en/article` | `/article`    | `/article`    | `en`   | (2)   |
+| URL       |                | `/it/article` | `/it/article` | `/article`    | `it`   |       |
+
+(*) The preference as set by the cookie or from the preferred language headers
+
+(1) As a locale detection is missing, if the preferred locale (*) is different from the default one. This will induce a
+redirect.
