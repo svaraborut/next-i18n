@@ -1,6 +1,6 @@
 /**
- * Multi zone i18n routing for Next.js. This approach is based on next-intl
- * and enhanced to support different translation approaches over the app.
+ * Zone concept, extends over the standard next-intl approach enabling the user
+ * to mix various sections with different translations within the same app.
  */
 
 export type I18nLocale = string
@@ -11,6 +11,9 @@ export interface I18nZoneBase {
 }
 
 export interface I18nZoneConfig extends I18nZoneBase {
+	// Extension of matcher to only match the canonical pathname of the route. The pathname
+	// will always include the leading slash and exclude the trailing slash
+	path?: RegExp | ((pathname: string) => boolean)
 	// The matcher, should be either a RegExp with two matching groups (1=locale, 2=pathname)
 	// or a function serving the same purpose. When it matches should result in the detection
 	// and extraction of such parts, else the zone will skip this url.
@@ -55,27 +58,41 @@ export interface I18nZone extends I18nZoneBase {
 }
 
 /**
+ * Match any url starting with an ISO language string and break it into the two distinct parts.
+ * This works with:
+ * / /zh /zh-CN /article /su-per-article /zh/article /zh-CN/article
+ */
+export const IsoLocaleUrlMatcher = /^(?:\/(\w{2}|\w{2}-\w{2}))?(|\/.*)$/
+
+/**
  * Create a zone that with URL based i18n via /cc/...
  * This does also support hiding the default locale.
  */
-export function createUrlZone({
+export function createZone({
 	locales,
 	defaultLocale,
 	showDefault = false,
 	queryName = 'ln',
 	querySwitch = true,
-	// Standard ISO 2 matcher
-	matcher = /^\/(\w{2}|\w{2}-\w{2})(\/.*)$/,
+	path,
+	matcher = IsoLocaleUrlMatcher,
 	producer = (locale, pathname) => `/${locale}${pathname}`
 }: I18nZoneConfig & { querySwitch?: boolean }): I18nZone {
 	// Normalize matcher to a (string) => [string, string] | undefined function
 	const _matcher =
 		matcher instanceof RegExp
-			? (path: string) => {
-					const m = path.match(matcher)
+			? (str: string) => {
+					const m = str.match(matcher)
 					return m ? ([m[1], m[2]] as const) : undefined
 				}
 			: matcher
+	// Normalize path matcher
+	const _path =
+		path === undefined
+			? undefined
+			: path instanceof RegExp
+				? (str: string) => !!str.match(path)
+				: path
 
 	return {
 		locales,
@@ -88,6 +105,9 @@ export function createUrlZone({
 			}
 			let detectedLocale = locales.find((cc) => cc === match[0])
 			const pathnameCanonical = match[1]
+			if (_path && !_path(pathnameCanonical || '/')) {
+				return undefined
+			}
 
 			// IF ENABLED, ALLOW THE USE OF SEARCH PARAMETERS AS AN OVERRIDE FOR LANGUAGE.
 			// THIS ALLOWS FOR FRONTEND-ONLY FORM GET OPERATIONS TO BE USED.
@@ -116,96 +136,4 @@ export function createUrlZone({
 			}
 		}
 	}
-}
-
-/**
- *
- */
-export function createImplicitZone({
-	locales,
-	defaultLocale,
-	matcher,
-	showDefault = false,
-	queryName = 'ln',
-	queryVisible = false
-}: I18nZoneConfig & { queryVisible?: boolean }): I18nZone {
-	return {
-		locales,
-		defaultLocale,
-		match: (url, currentLocale, targetLocale = undefined) => {
-			// Sanitize
-			const pathnameCanonicalTs = url.pathname
-			const pathnameCanonical = pathnameCanonicalTs === '/' ? '' : pathnameCanonicalTs
-			let detectedLocale: I18nLocale | undefined
-
-			// Skip if we are not match
-			if (matcher && !pathnameCanonicalTs.match(matcher as any)) {
-				return undefined
-			}
-
-			// IF ENABLED, ALLOW THE USE OF SEARCH PARAMETERS AS AN OVERRIDE FOR LANGUAGE.
-			// THIS ALLOWS FOR FE ONLY FORM GET OPERATIONS TO BE USED.
-			if (queryName && url.searchParams.has(queryName)) {
-				const ln = url.searchParams.get(queryName)
-				if (ln && locales.includes(ln)) detectedLocale = ln as I18nLocale
-			}
-
-			// Prepare output
-			const locale = targetLocale ?? detectedLocale ?? currentLocale
-			const canonicalUrl = new URL(url)
-			canonicalUrl.searchParams.delete(queryName)
-			canonicalUrl.pathname = `/${locale}${pathnameCanonical}`
-			const publicUrl = new URL(url)
-			publicUrl.searchParams.set(queryName, locale)
-			if (!targetLocale && (!queryVisible || (!showDefault && locale === defaultLocale))) {
-				publicUrl.searchParams.delete(queryName)
-			}
-
-			return {
-				canonicalUrl,
-				publicUrl,
-				currentLocale,
-				detectedLocale
-			}
-		}
-	}
-}
-
-// >> Experimental handling of relative urls
-
-export type I18nUrl = string | URL
-
-// (!) Used to process relative urls. This is an ugly hack
-const dummyBaseUrl = new URL('http://d-u-m-m-y')
-const dummyBaseHref = dummyBaseUrl.href
-
-function toUrl(url: I18nUrl): URL {
-	return typeof url === 'string' ? new URL(url, dummyBaseUrl) : url
-}
-
-function toHref(url: URL): string {
-	const href = url.href
-	return href.startsWith(dummyBaseHref) ? href.slice(dummyBaseHref.length - 1) : href
-}
-
-// << Experimental handling of relative urls
-
-/**
- * Match a single zone and return its value, and its match result
- */
-export function matchZone(
-	zones: I18nZone[],
-	url: I18nUrl,
-	currentLocale: I18nLocale | ((zone: I18nZone) => I18nLocale)
-): [I18nZone, Exclude<ReturnType<I18nZone['match']>, undefined>] | undefined {
-	const _url = toUrl(url)
-	for (const z of zones) {
-		const matchRes = z.match(
-			_url,
-			typeof currentLocale === 'function' ? currentLocale(z) : currentLocale,
-			undefined
-		)
-		if (matchRes) return [z, matchRes]
-	}
-	return undefined
 }

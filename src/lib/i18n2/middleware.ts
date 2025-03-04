@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Negotiator from 'negotiator'
 import { match as localeMatch } from '@formatjs/intl-localematcher'
-import { I18nZone, matchZone } from '@/lib/i18n2/routing'
+import { I18nZone } from '@/lib/i18n2/routing'
+import { matchZone } from '@/lib/i18n2/utils'
 
 export interface I18nServerConfig {
 	zones: I18nZone[]

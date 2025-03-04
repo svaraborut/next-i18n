@@ -3,6 +3,9 @@ import React, { useMemo } from 'react'
 import { LinkProps as NextLinkProps } from 'next/dist/client/link'
 import NextLink from 'next/link'
 import { useLocale } from 'use-intl'
+import { matchZone, toHref } from '@/lib/i18n2/utils'
+import { useRouter } from 'next/navigation'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export interface I18nNavigationConfig {
 	zones: I18nZone[]
@@ -15,9 +18,6 @@ export type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyo
 		locale?: string
 	}
 
-// (!) Used to process relative urls. This is an ugly hack
-const dummyBase = new URL('http://a')
-
 export function createNavigation({ zones }: I18nNavigationConfig) {
 	/**
 	 * Use zone internals to produce the navigation url. This function does execute in
@@ -29,15 +29,8 @@ export function createNavigation({ zones }: I18nNavigationConfig) {
 		currentLocale: I18nLocale,
 		targetLocale: I18nLocale | undefined = undefined
 	) {
-		const _url = typeof url === 'string' ? new URL(url, dummyBase) : url
-		for (const z of zones) {
-			const matchRes = z.match(_url, currentLocale, targetLocale)
-			// console.log(url, currentLocale, targetLocale, matchRes?.publicUrl.href)
-			if (matchRes) {
-				return matchRes.publicUrl.href.replace(dummyBase.href, '/')
-			}
-		}
-		return typeof url === 'string' ? url : url.href
+		const matchBundle = matchZone(zones, url, currentLocale, targetLocale)
+		return toHref(matchBundle?.[1].publicUrl ?? url)
 	}
 
 	return {
@@ -62,6 +55,25 @@ export function createNavigation({ zones }: I18nNavigationConfig) {
 				return prepareUrl(href as any, currentLocale, targetLocale)
 			}, [href, currentLocale, targetLocale])
 			return <NextLink href={href2!} hrefLang={targetLocale} prefetch={false} {...props} />
+		},
+		/**
+		 * Override navigation utils
+		 */
+		useRouter(): AppRouterInstance {
+			const currentLocale = useLocale()
+			const router = useRouter()
+			return {
+				...router,
+				push(href: string, options?): void {
+					return router.push(prepareUrl(href, currentLocale), options)
+				},
+				replace(href: string, options?): void {
+					return router.replace(prepareUrl(href, currentLocale), options)
+				},
+				prefetch(href: string, options?): void {
+					throw new Error('Prefetch is not supported')
+				}
+			}
 		}
 	}
 }

@@ -1,15 +1,14 @@
-import { createImplicitZone, createUrlZone, I18nZone } from '@/lib/i18n2/routing'
+import { createZone, I18nZone } from '@/lib/i18n2/routing'
+import { createImplicitZone } from '@/lib/i18n2/experimental'
 
 export const i18nZones: I18nZone[] = [
-	createUrlZone({
-		// matcher: /^\/(|article|description|descriptionPartial)$/,
-		// todo : this regex is a mess
-		// / /zh /article /zh/article
-		matcher: /^(?:\/(\w{2}))?(|\/(?:|article|descriptionPartial))$/,
+	createZone({
+		// matcher: /^(?:\/(\w{2}))?(|\/(?:|article|descriptionPartial))$/,
+		path: /^\/(|article|descriptionPartial)$/,
 		locales: ['en', 'it', 'si', 'fr', 'de', 'ru', 'gr', 'zh'],
 		defaultLocale: 'en'
 	}),
-	createUrlZone({
+	createZone({
 		matcher: (path) => {
 			const m = path.match(/^(\/description)(?:\/(\w{2}))?$/)
 			if (!m) return undefined
