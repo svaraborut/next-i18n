@@ -48,6 +48,7 @@ export interface I18nZone extends I18nZoneBase {
 	) =>
 		| undefined
 		| {
+				pathname: string
 				canonicalUrl: URL
 				publicUrl: URL
 				currentLocale: I18nLocale
@@ -105,7 +106,8 @@ export function createZone({
 			}
 			let detectedLocale = locales.find((cc) => cc === match[0])
 			const pathnameCanonical = match[1]
-			if (_path && !_path(pathnameCanonical || '/')) {
+			const pathname = pathnameCanonical || '/'
+			if (_path && !_path(pathname)) {
 				return undefined
 			}
 
@@ -129,6 +131,7 @@ export function createZone({
 					: producer(locale, pathnameCanonical)
 
 			return {
+				pathname,
 				canonicalUrl,
 				publicUrl,
 				currentLocale,

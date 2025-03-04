@@ -4,7 +4,7 @@ import { LinkProps as NextLinkProps } from 'next/dist/client/link'
 import NextLink from 'next/link'
 import { useLocale } from 'use-intl'
 import { matchZone, toHref } from '@/lib/i18n2/utils'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export interface I18nNavigationConfig {
@@ -74,6 +74,17 @@ export function createNavigation({ zones }: I18nNavigationConfig) {
 					throw new Error('Prefetch is not supported')
 				}
 			}
+		},
+		/**
+		 * Retrieve the current canonical pathname (without the locale slug)
+		 */
+		usePathname(): string {
+			const currentLocale = useLocale()
+			const pathname = usePathname()
+			return useMemo(() => {
+				const matchBundle = matchZone(zones, pathname, currentLocale)
+				return matchBundle?.[1].pathname ?? pathname
+			}, [pathname])
 		}
 	}
 }
