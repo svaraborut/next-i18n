@@ -2,16 +2,14 @@
 import { useLocale, useTranslations } from 'use-intl'
 import { Link } from '@/lib/routing'
 import { i18nConfig } from '@/middleware'
-import { Links } from '@/components/Links'
-import { LocaleSwitch } from '@/components/LocaleSwitch'
+import { Wrapper } from '@/components/Wrapper'
 
 export default function Page() {
 	const locale = useLocale()
 	const t = useTranslations()
 
 	return (
-		<div className='p-8'>
-			<Links />
+		<Wrapper>
 			<h1 className='text-xl font-bold'>Article {locale}</h1>
 			<h1 className='text-xl font-bold'>{t('title')}</h1>
 			<p>{t('description')}</p>
@@ -27,7 +25,6 @@ export default function Page() {
 					</Link>
 				))}
 			</div>
-			<LocaleSwitch />
-		</div>
+		</Wrapper>
 	)
 }

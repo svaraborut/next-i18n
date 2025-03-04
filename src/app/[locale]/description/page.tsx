@@ -1,8 +1,7 @@
 'use client'
 import { useLocale } from 'use-intl'
-import { Links } from '@/components/Links'
-import { LocaleSwitch } from '@/components/LocaleSwitch'
 import { loadLocalizedContent } from '@/lib/i18n/content'
+import { Wrapper } from '@/components/Wrapper'
 
 export default async function Page() {
 	const locale = useLocale()
@@ -13,8 +12,7 @@ export default async function Page() {
 	const Content = data.default
 
 	return (
-		<div className='p-8'>
-			<Links />
+		<Wrapper>
 			<div className='markdown'>
 				{isBackup && (
 					<div className='w-full rounded bg-amber-300 px-4 py-2'>
@@ -23,7 +21,6 @@ export default async function Page() {
 				)}
 				<Content />
 			</div>
-			<LocaleSwitch />
-		</div>
+		</Wrapper>
 	)
 }
