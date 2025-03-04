@@ -45,6 +45,7 @@ export function createImplicitZone({
 			}
 
 			return {
+				pathname: pathnameCanonicalTs, // todo
 				canonicalUrl,
 				publicUrl,
 				currentLocale,
